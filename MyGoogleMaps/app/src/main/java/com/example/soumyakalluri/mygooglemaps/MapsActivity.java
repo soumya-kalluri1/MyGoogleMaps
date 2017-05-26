@@ -1,8 +1,15 @@
 package com.example.soumyakalluri.mygooglemaps;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -13,14 +20,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private GoogleApiClient mGoogleApiClient;
+    public static final int REQUEST_FINE = 2;
+    public static final int REQUEST_COARSE = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
@@ -40,11 +49,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker where you were born and move the camera
         LatLng saltLakeCity = new LatLng(40.584225, -111.854239);
-        mMap.addMarker(new MarkerOptions().position(saltLakeCity).title("Born here: Alta View Hospital, UT"));
+        mMap.addMarker(new MarkerOptions().position(saltLakeCity).title("Born here: Alta View Hospital, Salt Lake City, UT"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(saltLakeCity));
 
-        // Add a marker at your current location
-        LatLng f101 = new LatLng(32.958310, -117.190596);
-        mMap.addMarker(new MarkerOptions().position(f101).title("Current Location: F101, CCA"));
+        // Check permission for getting location
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            Log.d("MyMapsApp", "Failed Fine Permission Check");
+            Log.d("MyMapsApp", Integer.toString(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)));
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_FINE);
+        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            Log.d("MyMapsApp", "Failed Coarse Permission Check");
+            Log.d("MyMapsApp", Integer.toString(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)));
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_COARSE);
+        }
+        // Show location
+        mMap.setMyLocationEnabled(true);
+    }
+
+    public void setNormalView(View v)
+    {
+        if (mMap.getMapType()!=1) mMap.setMapType(1);
+    }
+
+    public void setSatelliteView(View v)
+    {
+        if (mMap.getMapType()!=2) mMap.setMapType(2);
+    }
+
+    public void setTerrainView(View v)
+    {
+        if (mMap.getMapType()!=3) mMap.setMapType(3);
     }
 }
