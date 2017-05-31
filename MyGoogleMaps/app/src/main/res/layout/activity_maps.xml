@@ -40,8 +40,8 @@
         android:id="@+id/button_tracker"
         android:layout_width="match_parent"
         android:layout_height="37dp"
-        android:onClick="getLocation"
-        android:text="Use GPS" />
+        android:onClick="trackMe"
+        android:text="TRACK" />
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
