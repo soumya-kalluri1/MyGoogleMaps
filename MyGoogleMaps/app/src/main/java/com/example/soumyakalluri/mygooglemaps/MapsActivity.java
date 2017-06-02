@@ -42,7 +42,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private static final long MIN_TIME_BTWN_UPDATES = 1000 * 15;
     private static final float MIN_DISTANCE_CHANGE_FOR_UPDATES = 5.0f;
-    private static final float MY_LOC_ZOOM_FACTOR = 10f;
+    private static final float MY_LOC_ZOOM_FACTOR = 15f;
 
 
     @Override
